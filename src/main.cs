@@ -26,7 +26,7 @@ static void HandleSocket(Socket socket)
     var response = new byte[10];
     short errorCode = 0;
 
-    if(requestAPIVersion > 4) { errorCode = StatusCodes.UnsupportedVersion; }
+    if(requestAPIVersion < 0 || requestAPIVersion > 4) { errorCode = StatusCodes.UnsupportedVersion; }
 
     // First four bytes are for message size
     var sizeBytes = BitConverter.GetBytes(messageSize).Reverse().ToArray();
