@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.WebSockets;
@@ -17,10 +18,10 @@ static void HandleSocket(Socket socket)
     var headerBytes = new byte[12];
     var bytesRead = socket.Receive(headerBytes);
 
-    var messageSize = Convert.ToInt32(headerBytes[0..4]);
-    var requestAPIKey = Convert.ToInt16(headerBytes[4..6]);
-    var requestAPIVersion = Convert.ToInt16(headerBytes[6..8]);
-    var correlationID = Convert.ToInt32(headerBytes[8..12]);
+    var messageSize = BinaryPrimitives.ReadInt32BigEndian(headerBytes[0..4]);
+    var requestAPIKey = BinaryPrimitives.ReadInt16BigEndian(headerBytes[4..6]);
+    var requestAPIVersion = BinaryPrimitives.ReadInt16BigEndian(headerBytes[6..8]);
+    var correlationID = BinaryPrimitives.ReadInt32BigEndian(headerBytes[8..12]);
 
     var response = new byte[8];
 
