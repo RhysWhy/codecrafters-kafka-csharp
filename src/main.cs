@@ -14,11 +14,13 @@ while (true)
 
 static void HandleSocket(Socket socket)
 {
-    var correlationIDBuffer = new byte[4];
-    var bytesRead = socket.Receive(correlationIDBuffer);
+    var headerBytes = new byte[12];
+    var bytesRead = socket.Receive(headerBytes);
 
-    var messageSize = 0;
-    var correlationID = 7;
+    var messageSize = Convert.ToInt32(headerBytes[0..4]);
+    var requestAPIKey = Convert.ToInt16(headerBytes[4..6]);
+    var requestAPIVersion = Convert.ToInt16(headerBytes[6..8]);
+    var correlationID = Convert.ToInt32(headerBytes[8..12]);
 
     var response = new byte[8];
 
