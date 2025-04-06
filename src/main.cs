@@ -14,14 +14,18 @@ while (true)
 
 static void HandleSocket(Socket socket)
 {
-    var headerBytes = new byte[socket.ReceiveBufferSize];
-    var bytesRead = socket.Receive(headerBytes);
+    while (socket.Connected)
+    {
+        var headerBytes = new byte[socket.ReceiveBufferSize];
+        var bytesRead = socket.Receive(headerBytes);
 
-    var request = Request.Parse(headerBytes);
+        var request = Request.Parse(headerBytes);
 
-    var response = ProcessRequest(request);
+        var response = ProcessRequest(request);
 
-    socket.Send(response.ToBytes());
+        socket.Send(response.ToBytes());
+    }
+
     socket.Shutdown(SocketShutdown.Both);
     socket.Close();
 }
@@ -35,13 +39,13 @@ static BaseResponse ProcessRequest(Request request)
         case 18:
             {
                 return new APIVersionsResponse(request.CorrelationID, new List<APIVersion>
-                { 
+                {
                     new APIVersion
                     {
                         APIKey = 18,
                         MaxSupportedAPIVersion = 4,
                         MinSupportedAPIVersion = 4
-                    } 
+                    }
                 });
             }
     }
