@@ -12,8 +12,10 @@ public class ErrorResponse : BaseResponse
 
     public override byte[] ToBytes()
     {
-        MessageSize = 10;
-        var response = new byte[MessageSize];
+        var totalSize = 10;
+        // Message size should not contain the 4 bytes needed for itself
+        MessageSize = totalSize - 4;
+        var response = new byte[totalSize];
 
         BinaryPrimitives.WriteInt32BigEndian(response.AsSpan()[..4], MessageSize);
         BinaryPrimitives.WriteInt32BigEndian(response.AsSpan()[4..8], CorrelationID);

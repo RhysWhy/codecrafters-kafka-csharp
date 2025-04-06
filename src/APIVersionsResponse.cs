@@ -16,8 +16,10 @@ public class APIVersionsResponse : BaseResponse
         var totalVersions = Versions.Count;
 
         // 11 bytes for message size, correlation id, error code, number of versions, plus 12 bytes per version
-        MessageSize = 11 + (12 * totalVersions);
-        var response = new byte[MessageSize];
+        var totalSize = 11 + (12 * totalVersions);
+        // Message size should not contain the 4 bytes needed for itself
+        MessageSize = totalSize - 4;
+        var response = new byte[totalSize];
 
         BinaryPrimitives.WriteInt32BigEndian(response.AsSpan()[..4], MessageSize);
         BinaryPrimitives.WriteInt32BigEndian(response.AsSpan()[4..8], CorrelationID);
