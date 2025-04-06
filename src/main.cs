@@ -42,9 +42,15 @@ static BaseResponse ProcessRequest(Request request)
                 {
                     new APIVersion
                     {
-                        APIKey = 18,
-                        MaxSupportedAPIVersion = 4,
-                        MinSupportedAPIVersion = 4
+                        APIKey = APIKeys.APIVersions,
+                        MinSupportedAPIVersion = 0,
+                        MaxSupportedAPIVersion = 4
+                    },
+                    new APIVersion
+                    {
+                        APIKey = APIKeys.DescribeTopicPartitions,
+                        MinSupportedAPIVersion = 0,
+                        MaxSupportedAPIVersion = 0
                     }
                 });
             }
