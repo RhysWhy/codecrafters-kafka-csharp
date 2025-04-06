@@ -15,8 +15,8 @@ public class APIVersionsResponse : BaseResponse
     {
         var totalVersions = Versions.Count;
 
-        // 11 bytes for message size, correlation id, error code, number of versions, plus 7 bytes per version
-        var totalSize = 11 + (12 * totalVersions);
+        // 11 bytes for message size, correlation id, error code, number of versions, plus 7 bytes per version, plus 5 bytes for throttle time
+        var totalSize = 11 + (7 * totalVersions) + 5;
         // Message size should not contain the 4 bytes needed for itself
         MessageSize = totalSize - 4;
         var response = new byte[totalSize];
@@ -34,9 +34,10 @@ public class APIVersionsResponse : BaseResponse
             BinaryPrimitives.WriteInt16BigEndian(response.AsSpan()[startIndex..(startIndex += 2)], version.MinSupportedAPIVersion);
             BinaryPrimitives.WriteInt16BigEndian(response.AsSpan()[startIndex..(startIndex += 2)], version.MaxSupportedAPIVersion);
             response.AsSpan()[startIndex++] = 0; // Tag buffer
-            BinaryPrimitives.WriteInt32BigEndian(response.AsSpan()[startIndex..(startIndex += 4)], 0); // Throttle time in ms
-            response.AsSpan()[startIndex++] = 0; // Tag buffer
         }
+
+        BinaryPrimitives.WriteInt32BigEndian(response.AsSpan()[startIndex..(startIndex += 4)], 0); // Throttle time in ms
+        response.AsSpan()[startIndex++] = 0; // Tag buffer
 
         return response;
     }
