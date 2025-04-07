@@ -1,4 +1,4 @@
-﻿namespace codecrafters_kafka.src;
+﻿namespace src.Responses;
 
 public abstract class BaseResponse
 {

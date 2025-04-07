@@ -1,4 +1,4 @@
-﻿namespace codecrafters_kafka.src;
+﻿namespace src;
 
 public static class APIKeys
 {

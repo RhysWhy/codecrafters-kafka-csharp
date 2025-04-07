@@ -1,6 +1,6 @@
 ﻿using System.Buffers.Binary;
 
-namespace codecrafters_kafka.src;
+namespace src.Responses;
 
 public class ErrorResponse : BaseResponse
 {
